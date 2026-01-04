@@ -56,3 +56,23 @@ func TestResolveInvalidLink(t *testing.T) {
 		t.Fatalf("Expected error for invalid link, got nil")
 	}
 }
+
+func TestResolveInvalidSearch(t *testing.T) {
+	resolver := setUp()
+
+	invalidQuery := "ytsearch:asdlkfjasldkfjalksdjflkasjdf"
+	_, err := resolver.Resolve(invalidQuery)
+	if err == nil {
+		t.Fatalf("Expected error for invalid search, got nil")
+	}
+}
+
+func TestResolveInvalidIdentifier(t *testing.T) {
+	resolver := setUp()
+
+	invalidIdentifier := "not_a_link_or_search"
+	_, err := resolver.Resolve(invalidIdentifier)
+	if err == nil {
+		t.Fatalf("Expected error for invalid identifier, got nil")
+	}
+}
