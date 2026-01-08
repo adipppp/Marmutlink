@@ -22,23 +22,24 @@ func NewIDResolver() Resolver {
 
 func (r idResolver) Resolve(identifier string) (io.Reader, error) {
 	var videoID string
+	var err error
 
 	if strings.HasPrefix(identifier, "http") {
+		// Handle YouTube URL
 		videoID = extractVideoID(identifier)
 		if videoID == "" {
 			return nil, fmt.Errorf("invalid YouTube link")
 		}
-	} else {
-		query := identifier
-		if strings.HasPrefix(query, "ytsearch:") {
-			query = strings.TrimPrefix(query, "ytsearch:")
-		}
-
-		var err error
+	} else if strings.HasPrefix(identifier, "ytsearch:") {
+		// Handle search query with ytsearch: prefix
+		query := strings.TrimPrefix(identifier, "ytsearch:")
 		videoID, err = searchVideo(query)
 		if err != nil {
 			return nil, fmt.Errorf("search failed: %w", err)
 		}
+	} else {
+		// Treat as bare video ID
+		videoID = identifier
 	}
 
 	client := &ytdl.Client{}
