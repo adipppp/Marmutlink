@@ -16,8 +16,8 @@ func setUp() resolver.Resolver {
 func TestResolveYTLinkSuccess(t *testing.T) {
 	resolver := setUp()
 
-	link := "https://youtube.com/watch?v=RWFPC17YUhw"
-	stream, err := resolver.Resolve(link)
+	identifier := "RWFPC17YUhw"
+	stream, err := resolver.Resolve(identifier)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -40,20 +40,20 @@ func TestResolveYTLinkSuccess(t *testing.T) {
 func TestResolveYTSearchSuccess(t *testing.T) {
 	resolver := setUp()
 
-	query := "23.exe tyfw"
+	query := "ytsearch:23.exe tyfw"
 	_, err := resolver.Resolve(query)
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 }
 
-func TestResolveInvalidLink(t *testing.T) {
+func TestResolveInvalidIdentifier(t *testing.T) {
 	resolver := setUp()
 
-	invalidLink := "https://youtube.com/watch?v=INVALID_LINK"
-	_, err := resolver.Resolve(invalidLink)
+	invalidIdentifier := "INVALID_LINK"
+	_, err := resolver.Resolve(invalidIdentifier)
 	if err == nil {
-		t.Fatalf("Expected error for invalid link, got nil")
+		t.Fatalf("Expected error for invalid identifier, got nil")
 	}
 }
 
@@ -64,15 +64,5 @@ func TestResolveInvalidSearch(t *testing.T) {
 	_, err := resolver.Resolve(invalidQuery)
 	if err == nil {
 		t.Fatalf("Expected error for invalid search, got nil")
-	}
-}
-
-func TestResolveInvalidIdentifier(t *testing.T) {
-	resolver := setUp()
-
-	invalidIdentifier := "not_a_link_or_search"
-	_, err := resolver.Resolve(invalidIdentifier)
-	if err == nil {
-		t.Fatalf("Expected error for invalid identifier, got nil")
 	}
 }
